@@ -1,0 +1,28 @@
+
+version: "2"
+
+services:
+  db:
+    image: postgres
+    container_name: db
+    environment:
+      POSTGRES_PASSWORD: docker
+      POSTGRES_USER: docker
+
+  redis:
+    image: redis
+    container_name: cache
+    environment:
+      POSTGRES_PASSWORD: ${DB_USERNAME}
+      POSTGRES_USER: ${DB_PASSWORD}
+
+  web:
+    image: note-app
+    container_name: api
+    build: .
+    env_file: .env
+    ports:
+      - "3001:3064"
+    depends_on:
+      - db
+      - redis

@@ -1,0 +1,39 @@
+name: Node CI
+
+on: push
+
+jobs:
+  run-linter:
+    name: Run linter
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis
+
+    strategy:
+      matrix:
+        node-version: [13.x]
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Node.js dependencies
+        run: make install
+        env:
+          CI: true
+      - name: Run editorconfig
+        run: make editorconfig
+      - name: Run linter
+        run: make lint
+      - name: Run tests
+        run: make test
+        env:
+          REDIS_HOST: redis
+          REDIS_PORT: 6379

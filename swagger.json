@@ -1,0 +1,643 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Note app",
+    "description": "REST API for note app",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Users",
+      "description": "API for users in the system"
+    },
+    {
+      "name": "Notes",
+      "description": "API for notes in the system"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "components": {
+    "BearerAuth": {
+      "type": "http",
+      "scheme": "bearer"
+    }
+  },
+  "paths": {
+    "/api/users/auth": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Auth and create user",
+        "parameters": [
+          {
+            "name": "Auth params",
+            "in": "body",
+            "description": "Login and password to create user. Second password to double-check password",
+            "schema": {
+              "required": [
+                "login",
+                "password",
+                "secondPassword"
+              ],
+              "properties": {
+                "login": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                },
+                "secondPassword": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AuthInfo"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/api/users/login": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Login user",
+        "parameters": [
+          {
+            "name": "Login params",
+            "in": "body",
+            "description": "Login and password to login user",
+            "schema": {
+              "required": true,
+              "properties": {
+                "login": {
+                  "type": "string"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AuthInfo"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/api/users/logout": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Logout user",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "description": "jwt token",
+            "in": "header",
+            "schema": {
+              "required": true,
+              "properties": {
+                "token": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "required": true,
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/api/notes/": {
+      "post": {
+        "tags": [
+          "Notes"
+        ],
+        "summary": "Create a note",
+        "parameters": [
+          {
+            "name": "Create a note",
+            "in": "body",
+            "description": "Text for the note",
+            "schema": {
+              "required": true,
+              "properties": {
+                "text": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "jwt token",
+            "in": "header",
+            "schema": {
+              "required": true,
+              "properties": {
+                "token": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Note"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Notes"
+        ],
+        "summary": "Get all user's notes",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limit for pagination",
+            "schema": {
+              "properties": {
+                "offset": {
+                  "type": "number",
+                  "default": 0
+                }
+              }
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Offset for pagination",
+            "schema": {
+              "properties": {
+                "limit": {
+                  "type": "number",
+                  "default": 10
+                }
+              }
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "jwt token",
+            "in": "header",
+            "schema": {
+              "required": true,
+              "properties": {
+                "token": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Notes"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/api/notes/{id}": {
+      "patch": {
+        "tags": [
+          "Notes"
+        ],
+        "summary": "Update a note",
+        "parameters": [
+          {
+            "name": "Text",
+            "in": "body",
+            "description": "New text for the note",
+            "schema": {
+              "properties": {
+                "text": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "name": "id",
+            "description": "Note's id",
+            "in": "path",
+            "schema": {
+              "required": true,
+              "properties": {
+                "id": "string"
+              }
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "jwt token",
+            "in": "header",
+            "schema": {
+              "required": true,
+              "properties": {
+                "token": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Note"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Notes"
+        ],
+        "summary": "Delete a note",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Note's id",
+            "in": "path",
+            "schema": {
+              "required": true,
+              "properties": {
+                "id": "string"
+              }
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "jwt token",
+            "in": "header",
+            "schema": {
+              "required": true,
+              "properties": {
+                "token": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Note"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/api/notes/{id}/share": {
+      "post": {
+        "tags": [
+          "Notes"
+        ],
+        "summary": "share a note for all unauth users",
+        "parameters": [
+          {
+            "name": "isPublic",
+            "in": "body",
+            "description": "New value for isPublic property",
+            "schema": {
+              "properties": {
+                "isPublic": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          {
+            "name": "id",
+            "description": "Note's id",
+            "in": "path",
+            "schema": {
+              "required": true,
+              "properties": {
+                "id": "string"
+              }
+            }
+          },
+          {
+            "name": "Authorization",
+            "description": "jwt token",
+            "in": "header",
+            "schema": {
+              "required": true,
+              "properties": {
+                "token": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Note"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Notes"
+        ],
+        "summary": "Get shared note",
+        "parameters": [
+          {
+            "name": "id",
+            "description": "Note's id",
+            "in": "path",
+            "schema": {
+              "required": true,
+              "properties": {
+                "id": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "required": true,
+              "properties": {
+                "text": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "createdAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "login": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "required": [
+        "login",
+        "password"
+      ],
+      "properties": {
+        "id": {
+          "type": "number",
+          "uniqueItems": true
+        },
+        "login": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "password": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "Note": {
+      "required": [
+        "text",
+        "userId"
+      ],
+      "properties": {
+        "id": {
+          "type": "number",
+          "uniqueItems": true
+        },
+        "text": {
+          "type": "string"
+        },
+        "isPublic": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "userId": {
+          "type": "number"
+        }
+      }
+    },
+    "Notes": {
+      "type": "array",
+      "$ref": "#/definitions/Note"
+    },
+    "AuthInfo": {
+      "required": [
+        "login",
+        "token"
+      ],
+      "properties": {
+        "login": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "Error": {
+      "required": [
+        "message"
+      ],
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
