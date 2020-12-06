@@ -2,7 +2,10 @@ const { promisify } = require('util');
 const redis = require('redis');
 const logger = require('./logger');
 
-const client = redis.createClient(process.env.REDIS_URL);
+const client = redis.createClient({
+  port: process.env.REDIS_PORT,
+  host: process.env.REDIS_HOST,
+});
 
 client.on('error', (error) => {
   logger.error(error);
