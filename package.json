@@ -16,7 +16,7 @@
     "start": "NODE_ENV=production node index.js --production",
     "test::eslint": "npx eslint .",
     "test::editorconfig": "npx editorconfig-cli **/*.js",
-    "test::jest": "NODE_ENV=testing npx jest tests --detectOpenHandles",
+    "test::jest": "NODE_ENV=testing npx jest tests/routes/notes.e2e.test.js",
     "test": "npm run test::editorconfig && npm run test::eslint && npm run test::jest"
   },
   "repository": {

@@ -19,6 +19,6 @@ make lint:
 	npm run test::eslint
 
 test-coverage:
-	npm test -- --coverage --coverageProvider=v8
+	npm run test::jest -- --coverage --coverageProvider=v8
 
 .PHONY: test

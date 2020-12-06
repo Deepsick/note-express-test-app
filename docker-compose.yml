@@ -11,10 +11,8 @@ services:
 
   redis:
     image: redis
+    network_mode: host
     container_name: cache
-    environment:
-      POSTGRES_PASSWORD: ${DB_USERNAME}
-      POSTGRES_USER: ${DB_PASSWORD}
 
   web:
     image: note-app
