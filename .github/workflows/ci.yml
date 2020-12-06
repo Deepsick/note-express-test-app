@@ -33,7 +33,11 @@ jobs:
       - name: Run linter
         run: make lint
       - name: Run tests
-        run: make test
+        uses: paambaati/codeclimate-action@v2.7.4
+        with:
+          coverageCommand: make test-coverage
+          debug: true
         env:
           REDIS_HOST: redis
           REDIS_PORT: 6379
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}

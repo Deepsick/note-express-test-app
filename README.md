@@ -15,7 +15,7 @@ Node packaging management tool ```npm``` should be preinstalled.
 make install
 ```
 
-Fill in [env file](https://github.com/Deepsick/note-express-test-app/blob/main/README.md) with your values.
+Fill in [env file](https://github.com/Deepsick/note-express-test-app/blob/main/env_example) with your values.
 
 ## Usage
 
