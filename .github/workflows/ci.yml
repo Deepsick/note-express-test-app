@@ -35,8 +35,6 @@ jobs:
           make lint
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v2.7.4
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
           coverageCommand: make test-coverage
           debug: true
@@ -47,4 +45,5 @@ jobs:
           TOKEN_HASH_ALGORITHM: HS256
           TOKEN_EXPIRES_IN_HOURS: 1
           TOKEN_SECRET: secret
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           CI: true
