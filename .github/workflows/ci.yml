@@ -9,7 +9,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    container: node:10.18-jessie
 
     services:
       redis:
@@ -28,15 +27,6 @@ jobs:
       - name: Install dependencies
         run: |
           make install
-        env:
-          REDIS_HOST: redis
-          REDIS_PORT: 6379
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-          SALT_ROUNDS: 10
-          TOKEN_HASH_ALGORITHM: HS256
-          TOKEN_EXPIRES_IN_HOURS: 1
-          TOKEN_SECRET: secret
-          CI: true
       - name: Run editorconfig
         run: |
           make editorconfig
@@ -45,7 +35,16 @@ jobs:
           make lint
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v2.7.4
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
           coverageCommand: make test-coverage
           debug: true
-
+        env:
+          REDIS_HOST: redis
+          REDIS_PORT: 6379
+          SALT_ROUNDS: 10
+          TOKEN_HASH_ALGORITHM: HS256
+          TOKEN_EXPIRES_IN_HOURS: 1
+          TOKEN_SECRET: secret
+          CI: true
