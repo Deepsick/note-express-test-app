@@ -1,41 +1,28 @@
+
 name: Node CI
 
-on: push
+on:
+  - push
+  - pull_request
 
 jobs:
-  run-tests:
-    name: Run tests
-    runs-on: ubuntu-latest
-    container: node:10.18-jessie
+  build:
 
-    services:
-      redis:
-        image: redis
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [13.x]
 
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: Install Node.js dependencies
-        run: make install
-      - name: Run editorconfig
-        run: make editorconfig
-      - name: Run linter
-        run: make lint
-      - name: Run tests
-        uses: paambaati/codeclimate-action@v2.7.4
-        with:
-          coverageCommand: make test-coverage
-          debug: true
+      - name: Install dependencies
+        run: |
+          make install
         env:
           REDIS_HOST: redis
           REDIS_PORT: 6379
@@ -45,4 +32,16 @@ jobs:
           TOKEN_EXPIRES_IN_HOURS: 1
           TOKEN_SECRET: secret
           CI: true
+      - name: Run editorconfig
+        run: |
+          make editorconfig
+      - name: Run linter
+        run: |
+          make lint
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v2.7.4
+        with:
+          coverageCommand: make test-coverage
+          debug: true
+
 
