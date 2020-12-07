@@ -12,10 +12,10 @@ dev:
 start:
 	npm start
 
-make editorconfig:
+editorconfig:
 	npm run test::editorconfig
 
-make lint:
+lint:
 	npm run test::eslint
 
 test-coverage:

@@ -5,9 +5,6 @@ services:
   db:
     image: postgres
     container_name: db
-    environment:
-      POSTGRES_PASSWORD: docker
-      POSTGRES_USER: docker
 
   redis:
     image: redis

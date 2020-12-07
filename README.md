@@ -1,6 +1,7 @@
 [![Node CI](https://github.com/Deepsick/note-express-test-app/workflows/Node%20CI/badge.svg)](https://github.com/Deepsick/note-express-test-app/actions)
 [![Maintainability](https://api.codeclimate.com/v1/badges/49b13a3e6c6ee5578662/maintainability)](https://codeclimate.com/github/Deepsick/note-express-test-app/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/49b13a3e6c6ee5578662/test_coverage)](https://codeclimate.com/github/Deepsick/note-express-test-app/test_coverage)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/Deepsick/note-express-test-app/MIT)
 
 # Note app
 

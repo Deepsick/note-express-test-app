@@ -1,11 +1,14 @@
 const { promisify } = require('util');
 const redis = require('redis');
+const mock = require('redis-mock');
 const logger = require('./logger');
 
-const client = redis.createClient({
-  port: process.env.REDIS_PORT,
-  host: process.env.REDIS_HOST,
-});
+const client = process.env.NODE_ENV === 'testing'
+  ? mock.createClient()
+  : redis.createClient({
+    port: process.env.REDIS_PORT,
+    host: process.env.REDIS_HOST,
+  });
 
 client.on('error', (error) => {
   logger.error(error);
