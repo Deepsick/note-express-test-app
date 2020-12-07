@@ -1,49 +1,39 @@
-
 name: Node CI
 
-on:
-  - push
-  - pull_request
+on: push
 
 jobs:
-  build:
-
+  run-tests:
+    name: Run tests
     runs-on: ubuntu-latest
-
-    services:
-      redis:
-        image: redis
 
     strategy:
       matrix:
         node-version: [13.x]
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install dependencies
-        run: |
-          make install
+      - name: Install Node.js dependencies
+        run: make install
       - name: Run editorconfig
-        run: |
-          make editorconfig
+        run: make editorconfig
       - name: Run linter
-        run: |
-          make lint
-      - name: Test & publish code coverage
+        run: make lint
+      - name: Run tests
         uses: paambaati/codeclimate-action@v2.7.4
         with:
           coverageCommand: make test-coverage
           debug: true
         env:
-          REDIS_HOST: redis
-          REDIS_PORT: 6379
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           SALT_ROUNDS: 10
           TOKEN_HASH_ALGORITHM: HS256
           TOKEN_EXPIRES_IN_HOURS: 1
           TOKEN_SECRET: secret
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           CI: true
